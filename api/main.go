@@ -7,8 +7,6 @@ import (
 )
 
 func main(){
-
-
 	// run rest api
 	router.StartEcho()
 }

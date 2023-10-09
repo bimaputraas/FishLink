@@ -2,6 +2,7 @@ package router
 
 import (
 	"final_project-ftgo-h8/api/controller"
+	"final_project-ftgo-h8/api/repository"
 	"final_project-ftgo-h8/config"
 	"net/http"
 	"os"
@@ -20,8 +21,11 @@ func StartEcho(){
 	dsn := os.Getenv("DSNGORM")
 	gormDb := config.NewGorm(dsn)
 
+	// init repository
+	userRepository := repository.NewRepository(gormDb)
+
 	// init controller
-	userController := controller.NewController(gormDb)
+	userController := controller.NewController(userRepository)
 
 	// user route
 	user := e.Group("/user")
