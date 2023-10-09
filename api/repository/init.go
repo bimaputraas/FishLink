@@ -1,8 +1,15 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"final_project-ftgo-h8/api/dto"
+	"final_project-ftgo-h8/api/model"
 
-type UserRepository interface{}
+	"gorm.io/gorm"
+)
+
+type UserRepository interface{
+	CreateUser(dto.ReqUserRegister) (model.User,error)
+}
 
 type userRepository struct{
 	DB *gorm.DB
