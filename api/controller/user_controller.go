@@ -1,4 +1,4 @@
-package user
+package controller
 
 import (
 	"final_project-ftgo-h8/api/dto"
@@ -6,14 +6,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (c *controller) Register(ctx echo.Context) error{
+func (c *userController) Register(ctx echo.Context) error{
 	return dto.WriteResponseWithDetail(ctx, 201, "Success register", "detail")
 }
 
-func (c *controller) RegisterVerification(ctx echo.Context) error{
+func (c *userController) RegisterVerification(ctx echo.Context) error{
 	return dto.WriteResponseWithDetail(ctx, 200, "Success register verification", "detail")
 }
 
-func (c *controller) Login(ctx echo.Context) error{
+func (c *userController) Login(ctx echo.Context) error{
 	return dto.WriteResponseWithDetail(ctx, 200, "Success login", "detail")
 }
