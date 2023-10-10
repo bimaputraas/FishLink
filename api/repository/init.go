@@ -11,7 +11,7 @@ type UserRepository interface{
 	InsertUser(reqbody dto.ReqUserRegister) (model.User,error)
 	FindUserByEmail(email string) (model.User,error)
 	InsertUserVerification(userId uint, code string) error
-	UpdateUserStatusByIdAndCode(userId uint, code string) (model.UserVerification,error)
+	UpdateUserStatusByIdAndCode(userId uint, code string) (model.User,error)
 }
 
 type userRepository struct{

@@ -43,34 +43,29 @@ func (r *userRepository) InsertUserVerification(userId uint, code string) error{
 	return nil
 }
 
-func (r *userRepository) UpdateUserStatusByIdAndCode(userId uint, code string) (model.UserVerification,error){
+func (r *userRepository) UpdateUserStatusByIdAndCode(userId uint, code string) (model.User,error){
 	// find user verification
-	userVerif := model.UserVerification{
-		UserID: userId,
-		VerificationCode: code,
-	}
-	result := r.DB.First(&userVerif)
+	userVerif := model.UserVerification{}
+	result := r.DB.Where("user_id = ? and verification_code = ?",userId,code).First(&userVerif)
 	if result.Error != nil{
-		return model.UserVerification{},result.Error
+		return model.User{},result.Error
 	}
 
 	// find user
-	user := model.User{
-		Id: userVerif.UserID,
-	}
-	result = r.DB.First(&user)
+	user := model.User{}
+	result = r.DB.First(&user,userVerif.Id)
 	if result.Error != nil{
-		return model.UserVerification{},result.Error
+		return model.User{},result.Error
 	}
 
 	// update user
 	user.Status = "Verified"
 	result = r.DB.Save(&user)
 	if result.Error != nil{
-		return model.UserVerification{},result.Error
+		return model.User{},result.Error
 	}
 
-	return userVerif,nil
+	return user,nil
 }
 
 

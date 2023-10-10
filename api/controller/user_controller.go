@@ -70,14 +70,14 @@ func (c *userController) RegisterVerification(ctx echo.Context) error{
 		return dto.WriteResponseWithDetail(ctx,500,"failed to parse string to uinteger",err.Error())
 	}
 	codeStr := ctx.Param("code")
-
+	
 	// update
-	user,err := c.repository.UpdateUserStatusByIdAndCode(uint(id),codeStr)
+	_,err = c.repository.UpdateUserStatusByIdAndCode(uint(id),codeStr)
 	if err != nil {
 		return dto.WriteResponseWithDetail(ctx,500,"failed to verification user account",err.Error())
 	}
 
-	return dto.WriteResponseWithDetail(ctx, 200, "success register verification", user)
+	return dto.WriteResponse(ctx, 200, "success register verification")
 }
 
 func (c *userController) Login(ctx echo.Context) error{
