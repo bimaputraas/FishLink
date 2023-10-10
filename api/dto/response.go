@@ -8,7 +8,7 @@ type Response struct {
 	Detail  interface{}
 }
 
-func WriteResponse(ctx echo.Context,code int, message string, detail interface{}) error {
+func WriteResponse(ctx echo.Context,code int, message string) error {
 	return ctx.JSON(code,Response{
         Message: message,
         Code: code,

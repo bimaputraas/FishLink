@@ -2,6 +2,7 @@ package router
 
 import (
 	"final_project-ftgo-h8/api/controller"
+	"final_project-ftgo-h8/api/publisher"
 	"final_project-ftgo-h8/api/repository"
 	"final_project-ftgo-h8/config"
 	"net/http"
@@ -24,8 +25,17 @@ func StartEcho(){
 	// init repository
 	userRepository := repository.NewRepository(gormDb)
 
+	// init chan
+	channel := config.NewChannel()
+
+	// add queue for email notification
+	_ = config.AddQueue(channel,"fishlink-email_notification")
+
+	// init publisher
+	emailNotification := publisher.NewPublisher(channel)
+
 	// init controller
-	userController := controller.NewController(userRepository)
+	userController := controller.NewController(userRepository,emailNotification)
 
 	// user route
 	user := e.Group("/user")
