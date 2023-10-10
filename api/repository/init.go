@@ -8,7 +8,10 @@ import (
 )
 
 type UserRepository interface{
-	CreateUser(dto.ReqUserRegister) (model.User,error)
+	InsertUser(reqbody dto.ReqUserRegister) (model.User,error)
+	FindUserByEmail(email string) (model.User,error)
+	InsertUserVerification(userId uint, code string) error
+	UpdateUserStatusByIdAndCode(userId uint, code string) error
 }
 
 type userRepository struct{
