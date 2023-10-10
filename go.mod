@@ -3,6 +3,7 @@ module final_project-ftgo-h8
 go 1.20
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.11.1
 	go.mongodb.org/mongo-driver v1.12.1
