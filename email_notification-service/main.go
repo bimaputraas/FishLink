@@ -7,16 +7,22 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
+	"os"
 	"strings"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 const CONFIG_SMTP_HOST = "smtp.gmail.com"
 const CONFIG_SMTP_PORT = 587
 const CONFIG_SENDER_NAME = "FishLink <ddummymail65@gmail.com>"
 const CONFIG_AUTH_EMAIL = "ddummymail65@gmail.com"
-const CONFIG_AUTH_PASSWORD = "pnauwrgqqfgbclwp"
+
 
 func sendMail(to []string, cc []string, subject, message string) error {
+	// auth password
+	var CONFIG_AUTH_PASSWORD = os.Getenv("AUTHMAILPASSWORD")
+	// body
     body := "From: " + CONFIG_SENDER_NAME + "\n" +
         "To: " + strings.Join(to, ",") + "\n" +
         "Cc: " + strings.Join(cc, ",") + "\n" +
