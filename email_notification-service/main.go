@@ -1,8 +1,5 @@
 package main
 
-// pnau wrgq qfgb clwp
-// pnau wrgq qfgb clwp
-
 import (
 	"fmt"
 	"log"
