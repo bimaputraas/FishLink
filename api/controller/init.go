@@ -3,6 +3,7 @@ package controller
 import (
 	"final_project-ftgo-h8/api/publisher"
 	"final_project-ftgo-h8/api/repository"
+	"final_project-ftgo-h8/pb"
 
 	"github.com/labstack/echo/v4"
 )
@@ -26,7 +27,19 @@ func NewController(r repository.UserRepository, p publisher.Publisher) UserContr
 	}
 }
 
-// product
+// product controller
+type ProductController interface {
+	CreateProduct(echo.Context) error
+	GetAllProducts(echo.Context) error
+	GetProduct(echo.Context) error
+	UpdateProduct(echo.Context) error
+	DeleteProduct(ctx echo.Context) error
+}
 
+type productController struct {
+	Service pb.ProductServiceClient
+}
 
-
+func NewProductController(pb pb.ProductServiceClient) ProductController {
+	return &productController{Service: pb}
+}
