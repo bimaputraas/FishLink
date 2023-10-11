@@ -44,22 +44,17 @@ func NewEchoInstance() *echo.Echo{
 	// init authentication middleware
 	authMiddleware := middleware.NewAuthenticationMiddleware(userRepository)
 
-	// user route
-	user := e.Group("/user")
+	// user gateaway (before login)
+	e.POST("/register", userController.Register)
+	e.POST("/login", userController.Login)
+	e.GET("user-verification-register/:id/:code", userController.RegisterVerification)
+	// user route (after login)
+	user := e.Group("/user",authMiddleware.Authentication)
 	{
-		// before login
-		user.POST("/register", userController.Register)
-		user.POST("/login", userController.Login)
-		user.GET("/verification-register/:id/:code", userController.RegisterVerification)
-
-		// after login
-		userAuth := user.Group("",authMiddleware.Authentication)
-		{
-			userAuth.GET("/info", userController.GetInfo)
-			userAuth.PUT("/top-up", userController.TopUp)
-			userAuth.POST("/order",func(c echo.Context) error{return nil})
-			userAuth.GET("/order",func(c echo.Context) error{return nil})
-		}
+		user.GET("/info", userController.GetInfo)
+		user.PUT("/top-up", userController.TopUp)
+		user.POST("/order",func(c echo.Context) error{return nil})
+		user.GET("/order",func(c echo.Context) error{return nil})
 	}
 
 	// init gRPC connection

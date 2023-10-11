@@ -59,6 +59,9 @@ func (c *userController) Register(ctx echo.Context) error{
 		return dto.WriteResponseWithDetail(ctx,500,"failed to send email notification",err.Error())
 	}
 
+	// omitempty
+	user.Id = 0
+	user.Password = ""
 	
 	return dto.WriteResponseWithDetail(ctx, 201, "register success, please check your email for verification", user)
 }

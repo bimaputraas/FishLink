@@ -44,7 +44,7 @@ func (r *userRepository) InsertUserVerification(userId uint, code string) error{
 }
 
 func (r *userRepository) UpdateUserStatusByIdAndCode(userId uint, code string) (model.User,error){
-	// find user verification
+	// check existing & validate code user verification
 	userVerif := model.UserVerification{}
 	result := r.gormDb.Where("user_id = ? and verification_code = ?",userId,code).First(&userVerif)
 	if result.Error != nil{
@@ -53,7 +53,7 @@ func (r *userRepository) UpdateUserStatusByIdAndCode(userId uint, code string) (
 
 	// find user
 	user := model.User{}
-	result = r.gormDb.First(&user,userVerif.Id)
+	result = r.gormDb.First(&user,userId)
 	if result.Error != nil{
 		return model.User{},result.Error
 	}

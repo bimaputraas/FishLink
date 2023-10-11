@@ -16,3 +16,7 @@ type ProductController interface {
 	UpdateProduct(echo.Context) error
 	DeleteProduct(ctx echo.Context) error
 }
+
+type OrderController interface{
+	
+}
