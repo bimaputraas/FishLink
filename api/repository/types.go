@@ -13,3 +13,8 @@ type UserRepository interface {
 	UpdateUserStatusByIdAndCode(userId uint, code string) (model.User, error)
 	FindUserById(userId uint) (model.User,error)
 }
+
+type OrderRepository interface{
+	InsertOrderAndDetail(reqBody dto.ReqBodyNewOrder, userId uint) (model.OrderDetail,error)
+	FindOrderDetails(userId uint) ([]model.OrderDetail,error)
+}

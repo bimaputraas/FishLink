@@ -12,3 +12,11 @@ type userRepository struct{
 func NewUserRepository(db *gorm.DB) UserRepository{
 	return &userRepository{gormDb: db}
 }
+
+type orderRepository struct{
+	gormDb *gorm.DB
+}
+
+func NewOrderRepository(db *gorm.DB) OrderRepository{
+	return &orderRepository{gormDb: db}
+}

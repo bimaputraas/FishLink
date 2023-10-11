@@ -18,5 +18,6 @@ type ProductController interface {
 }
 
 type OrderController interface{
-	
+	NewOrder(ctx echo.Context) error
+	GetOrders(ctx echo.Context) error
 }

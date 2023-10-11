@@ -2,21 +2,23 @@ package main
 
 import (
 	"final_project-ftgo-h8/config"
+	"final_project-ftgo-h8/helper"
 	"final_project-ftgo-h8/pb"
 	"final_project-ftgo-h8/product-service/repository"
 	"final_project-ftgo-h8/product-service/server"
 	"log"
 	"net"
+	"os"
 
 	"google.golang.org/grpc"
 )
 
 func main() {
+    // load env
+    helper.LoadEnv()
+
 	// init db connection
-    db, err := config.InitDB()
-	if err != nil {
-        log.Fatal(err)
-    }
+    db := config.NewGorm(os.Getenv("DSNGORM"))
 
     // Create a new gRPC server
     grpcServer := grpc.NewServer()

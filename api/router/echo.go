@@ -28,6 +28,7 @@ func NewEchoInstance() *echo.Echo{
 
 	// init repository
 	userRepository := repository.NewUserRepository(gormDb)
+	orderRepository := repository.NewOrderRepository(gormDb)
 
 	// init chan
 	channel := config.NewChannel()
@@ -39,7 +40,8 @@ func NewEchoInstance() *echo.Echo{
 	emailNotification := publisher.NewPublisher(channel)
 
 	// init controller
-	userController := controller.NewController(userRepository, emailNotification)
+	userController := controller.NewUserController(userRepository, emailNotification)
+	orderController := controller.NewOrderController(orderRepository)
 
 	// init authentication middleware
 	authMiddleware := middleware.NewAuthenticationMiddleware(userRepository)
@@ -53,8 +55,8 @@ func NewEchoInstance() *echo.Echo{
 	{
 		user.GET("/info", userController.GetInfo)
 		user.PUT("/top-up", userController.TopUp)
-		user.POST("/order",func(c echo.Context) error{return nil})
-		user.GET("/order",func(c echo.Context) error{return nil})
+		user.POST("/order",orderController.NewOrder)
+		user.GET("/order",orderController.GetOrders)
 	}
 
 	// init gRPC connection
