@@ -20,8 +20,23 @@ func (c *userController) Register(ctx echo.Context) error{
 	if err != nil {
 		return dto.WriteResponseWithDetail(ctx,400,"failed to bind",err.Error())
 	}
+	
+	// validate 
 
-	// validate
+	// validate and set role
+	switch reqBody.Role{
+	case "Admin":
+	case "User":
+	case "admin":
+		reqBody.Role = "Admin"
+	case "user":
+		reqBody.Role = "User"
+	case "":
+		reqBody.Role = "User"
+	default:
+		return dto.WriteResponse(ctx,400,"invalid role")
+	}
+
 
 	// hash
 	hash,err := helper.HashPassword(reqBody.Password)
@@ -81,7 +96,7 @@ func (c *userController) RegisterVerification(ctx echo.Context) error{
 		return dto.WriteResponseWithDetail(ctx,500,"failed to verification user account",err.Error())
 	}
 
-	return dto.WriteResponse(ctx, 200, "success register verification")
+	return dto.WriteResponse(ctx, 200, "your account has been successfully verified")
 }
 
 func (c *userController) Login(ctx echo.Context) error{
@@ -115,21 +130,22 @@ func (c *userController) Login(ctx echo.Context) error{
 		return dto.WriteResponseWithDetail(ctx,500,"failed to generate jwt",err.Error())
 	}
 	
-	return dto.WriteResponseWithDetail(ctx, 200, "success login", echo.Map{
+	return dto.WriteResponseWithDetail(ctx, 200, "login success", echo.Map{
 		"jwt":tokenString,
 	})
 }
 
 func (c *userController) GetInfo(ctx echo.Context) error{
 	user := ctx.Get("user").(model.User)
+	// omitempty
 	user.Password = ""
 	user.Id = 0
 
-	return dto.WriteResponseWithDetail(ctx, 200, "success get info", user)
+	return dto.WriteResponseWithDetail(ctx, 200, "user account information", user)
 }
 
 func (c *userController) TopUp(ctx echo.Context) error{
 	// user := ctx.Get("user").(model.User)
 
-	return dto.WriteResponse(ctx, 200, "success top-up")
+	return dto.WriteResponse(ctx, 200, "top up success")
 }

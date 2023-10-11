@@ -15,6 +15,8 @@ func (r *userRepository) InsertUser(reqBody dto.ReqBodyRegister) (model.User,err
 		Address: reqBody.Address,
 		Phone: reqBody.Phone,
 		Status: "Pending Verification",
+		Amount: reqBody.Amount,
+		Role: reqBody.Role,
 		RegisteredAt: time.Now(),
 	}
 
