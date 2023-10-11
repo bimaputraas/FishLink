@@ -10,13 +10,13 @@ import (
 func main(){
 	// init channel
 	channel := config.NewChannel()
-
-	// add queue
+	
+	// init queue
 	queue := config.AddQueue(channel,"fishlink-email_notification")
-
+	
 	// init consumer
-	consumer := consumer.NewConsumer(channel)
-
+	consumer := consumer.NewConsumer(channel,queue)
+	
 	// start app
-	consumer.ConsumeQueuedMessage(queue.Name)
+	consumer.ConsumeQueuedMessage()
 }

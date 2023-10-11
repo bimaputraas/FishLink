@@ -8,9 +8,9 @@ import (
 	"log"
 )
 
-func (c *emailNotification) ConsumeQueuedMessage(queueName string){
+func (c *emailNotification) ConsumeQueuedMessage(){
 	msgs, err := c.channel.Consume(
-		queueName, // queue
+		c.queue.Name, // queue
 		"",     // consumer
 		true,   // auto-ack
 		false,  // exclusive
