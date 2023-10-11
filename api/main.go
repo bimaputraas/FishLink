@@ -7,6 +7,9 @@ import (
 )
 
 func main(){
-	// run rest api
-	router.StartEcho()
+	// init app rest api
+	app := router.NewEchoInstance()
+
+	// run app
+	app.Logger.Fatal(app.Start(":8080"))
 }

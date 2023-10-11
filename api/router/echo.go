@@ -2,6 +2,7 @@ package router
 
 import (
 	"final_project-ftgo-h8/api/controller"
+	"final_project-ftgo-h8/api/middleware"
 	"final_project-ftgo-h8/api/publisher"
 	"final_project-ftgo-h8/api/repository"
 	"final_project-ftgo-h8/config"
@@ -14,7 +15,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func StartEcho() {
+func NewEchoInstance() *echo.Echo{
 	// init echo
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
@@ -26,7 +27,7 @@ func StartEcho() {
 	gormDb := config.NewGorm(dsn)
 
 	// init repository
-	userRepository := repository.NewRepository(gormDb)
+	userRepository := repository.NewUserRepository(gormDb)
 
 	// init chan
 	channel := config.NewChannel()
@@ -40,12 +41,25 @@ func StartEcho() {
 	// init controller
 	userController := controller.NewController(userRepository, emailNotification)
 
+	// init authentication middleware
+	authMiddleware := middleware.NewAuthenticationMiddleware(userRepository)
+
 	// user route
 	user := e.Group("/user")
 	{
+		// before login
 		user.POST("/register", userController.Register)
 		user.POST("/login", userController.Login)
 		user.GET("/verification-register/:id/:code", userController.RegisterVerification)
+
+		// after login
+		userAuth := user.Group("",authMiddleware.Authentication)
+		{
+			userAuth.GET("/info", userController.GetInfo)
+			userAuth.PUT("/top-up", userController.TopUp)
+			userAuth.POST("/order",func(c echo.Context) error{return nil})
+			userAuth.GET("/order",func(c echo.Context) error{return nil})
+		}
 	}
 
 	// init gRPC connection
@@ -61,6 +75,7 @@ func StartEcho() {
 	// init ProductController with the gRPC client
 	productController := controller.NewProductController(grpcClient)
 
+	// product route
 	product := e.Group("/product")
 	{
 		product.POST("", productController.CreateProduct)
@@ -70,5 +85,5 @@ func StartEcho() {
 		product.DELETE("/:id", productController.DeleteProduct)
 	}
 
-	e.Logger.Fatal(e.Start(":8080"))
+	return e
 }
