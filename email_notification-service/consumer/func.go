@@ -35,7 +35,7 @@ func (c *emailNotification) ConsumeQueuedMessage(){
 		  }
 
 		  subject := "Fishlink account verification"
-		  message := fmt.Sprintf("Your verification link : http://localhost:8080/user/verification-register/%d/%s", userVerif.UserId,userVerif.VerificationCode)
+		  message := fmt.Sprintf("Your verification link : http://localhost:8080/user-verification-register/%d/%s", userVerif.UserId,userVerif.VerificationCode)
 		  helper.SendMail(userVerif.Email, subject, message)
 		}
 	}()

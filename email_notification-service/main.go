@@ -3,11 +3,15 @@ package main
 import (
 	"final_project-ftgo-h8/config"
 	"final_project-ftgo-h8/email_notification-service/consumer"
+	"final_project-ftgo-h8/helper"
 
 	_ "github.com/joho/godotenv/autoload"
 )
 
 func main(){
+	// load env
+	helper.LoadEnv()
+
 	// init channel
 	channel := config.NewChannel()
 	
