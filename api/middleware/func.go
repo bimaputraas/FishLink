@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"final_project-ftgo-h8/api/dto"
-	"final_project-ftgo-h8/helper"
+	"fishlink-mainapi/dto"
+	"fishlink-mainapi/helper"
 	"os"
 
 	"github.com/labstack/echo/v4"

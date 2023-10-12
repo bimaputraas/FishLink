@@ -1,8 +1,8 @@
 package server
 
 import (
-	pb "final_project-ftgo-h8/pb"
-	"final_project-ftgo-h8/product-service/repository"
+	pb "fishlink-product-service/pb"
+	"fishlink-product-service/repository"
 )
 
 type ProductServer struct {

@@ -3,9 +3,9 @@ package controller
 import (
 	"context"
 	"encoding/json"
-	"final_project-ftgo-h8/api/dto"
-	"final_project-ftgo-h8/api/model"
-	"final_project-ftgo-h8/helper"
+	"fishlink-mainapi/dto"
+	"fishlink-mainapi/helper"
+	"fishlink-mainapi/model"
 	"os"
 	"strconv"
 

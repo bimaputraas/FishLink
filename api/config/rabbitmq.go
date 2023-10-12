@@ -2,11 +2,13 @@ package config
 
 import (
 	"log"
+	"os"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 func NewChannel() *amqp.Channel{
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	rabbitmqHost := os.Getenv("RABBITMQ_HOST")
+	conn, err := amqp.Dial("amqp://guest:guest@"+rabbitmqHost+":5672/")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

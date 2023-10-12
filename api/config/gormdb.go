@@ -1,7 +1,6 @@
 package config
 
 import (
-	"final_project-ftgo-h8/helper"
 	"fmt"
 	"log"
 	"os"
@@ -20,7 +19,6 @@ func NewGorm() *gorm.DB {
  	DATABASE_NAME := os.Getenv("DATABASE_NAME")
 
 	// load env
-	helper.LoadEnv()
 	gormDSN := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", DATABASE_USER, DATABASE_PASS, DATABASE_HOST, DATABASE_PORT, DATABASE_NAME)
 	
 	// gormDSN := "postgresql://postgres:SHd6S6PqrLIJzNi1YhOA@containers-us-west-198.railway.app:5646/railway"

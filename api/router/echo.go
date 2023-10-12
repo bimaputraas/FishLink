@@ -1,12 +1,12 @@
 package router
 
 import (
-	"final_project-ftgo-h8/api/controller"
-	"final_project-ftgo-h8/api/middleware"
-	"final_project-ftgo-h8/api/publisher"
-	"final_project-ftgo-h8/api/repository"
-	"final_project-ftgo-h8/config"
-	"final_project-ftgo-h8/pb"
+	"fishlink-mainapi/config"
+	"fishlink-mainapi/controller"
+	"fishlink-mainapi/middleware"
+	"fishlink-mainapi/pb"
+	"fishlink-mainapi/publisher"
+	"fishlink-mainapi/repository"
 	"log"
 	"net/http"
 

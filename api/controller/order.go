@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"final_project-ftgo-h8/api/dto"
-	"final_project-ftgo-h8/api/model"
+	"fishlink-mainapi/dto"
+	"fishlink-mainapi/model"
 	"time"
 
 	"github.com/labstack/echo/v4"

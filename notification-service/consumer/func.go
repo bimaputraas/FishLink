@@ -2,8 +2,8 @@ package consumer
 
 import (
 	"encoding/json"
-	"final_project-ftgo-h8/api/dto"
-	"final_project-ftgo-h8/helper"
+	"fishlink-notification-service/dto"
+	"fishlink-notification-service/helper"
 	"fmt"
 	"log"
 )
