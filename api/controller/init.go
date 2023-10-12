@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"final_project-ftgo-h8/api/publisher"
-	"final_project-ftgo-h8/api/repository"
-	"final_project-ftgo-h8/pb"
+	"fishlink-mainapi/pb"
+	"fishlink-mainapi/publisher"
+	"fishlink-mainapi/repository"
 )
 
 // user controller

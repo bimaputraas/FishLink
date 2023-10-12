@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  notification-service:
+    build: notification-service
+    environment:
+      AUTHMAILPASSWORD: tpgijjwafrbnvmwl
+      RABBITMQ_HOST: rabbitmq:5673
+    depends_on:
+      - rabbitmq
+  product-service:
+    build: product-service
+    environment:
+      DATABASE_HOST: containers-us-west-198.railway.app
+      DATABASE_PORT: '5646'
+      DATABASE_USER: postgres
+      DATABASE_PASS: SHd6S6PqrLIJzNi1YhOA
+      DATABASE_NAME: railway
+  main-api:
+    build: api
+    environment:
+      DATABASE_HOST: containers-us-west-198.railway.app
+      DATABASE_PORT: '5646'
+      DATABASE_USER: postgres
+      DATABASE_PASS: SHd6S6PqrLIJzNi1YhOA
+      DATABASE_NAME: railway
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    ports:
+      - 5672:5672
+      - 15672:15672
