@@ -1,6 +1,7 @@
 package config
 
 import (
+	"final_project-ftgo-h8/helper"
 	"fmt"
 	"log"
 	"os"
@@ -9,14 +10,20 @@ import (
 	"gorm.io/gorm"
 )
 
-var DATABASE_HOST = os.Getenv("DATABASE_HOST")
-var DATABASE_PORT = os.Getenv("DATABASE_PORT")
-var DATABASE_USER = os.Getenv("DATABASE_USER")
-var DATABASE_PASS = os.Getenv("DATABASE_PASS")
-var DATABASE_NAME = os.Getenv("DATABASE_NAME")
 
 func NewGorm() *gorm.DB {
+	// dsn data
+	DATABASE_HOST := os.Getenv("DATABASE_HOST")
+ 	DATABASE_PORT := os.Getenv("DATABASE_PORT")
+	DATABASE_USER := os.Getenv("DATABASE_USER")
+	DATABASE_PASS := os.Getenv("DATABASE_PASS")
+ 	DATABASE_NAME := os.Getenv("DATABASE_NAME")
+
+	// load env
+	helper.LoadEnv()
 	gormDSN := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", DATABASE_USER, DATABASE_PASS, DATABASE_HOST, DATABASE_PORT, DATABASE_NAME)
+	
+	// gormDSN := "postgresql://postgres:SHd6S6PqrLIJzNi1YhOA@containers-us-west-198.railway.app:5646/railway"
 	db, err := gorm.Open(postgres.Open(gormDSN), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)

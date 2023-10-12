@@ -8,9 +8,9 @@ import (
 	"log"
 )
 
-func (c *emailNotification) ConsumeQueuedMessage(){
+func (c *registerNotification) ConsumeQueuedMessage(queueName string){
 	msgs, err := c.channel.Consume(
-		c.queue.Name, // queue
+		queueName, // queue
 		"",     // consumer
 		true,   // auto-ack
 		false,  // exclusive
@@ -21,25 +21,22 @@ func (c *emailNotification) ConsumeQueuedMessage(){
 	if err != nil {
 		log.Fatal(err)
 	}
-	  
-	var forever chan struct{}
 	
-	go func() {
-		for d := range msgs {
-		  log.Printf("Received a message: %s", d.Body)
+	
+	for d := range msgs {
+	  	log.Printf("Received a message: %s", d.Body)
 		  
-		  var userVerif dto.UserEmailVerification
-		  err := json.Unmarshal(d.Body, &userVerif)
-		  if err != nil {
-			log.Fatal(err)
-		  }
+	  	var userVerif dto.UserEmailVerification
+	  	err := json.Unmarshal(d.Body, &userVerif)
+	  	if err != nil {
+				log.Fatal(err)
+	  	}
 
-		  subject := "Fishlink account verification"
-		  message := fmt.Sprintf("Your verification link : http://localhost:8080/user-verification-register/%d/%s", userVerif.UserId,userVerif.VerificationCode)
-		  helper.SendMail(userVerif.Email, subject, message)
-		}
-	}()
-	  
-	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
-	<-forever
+	  	subject := "Fishlink account verification"
+	  	message := fmt.Sprintf("Your verification link : http://localhost:8080/user-verification-register/%d/%s", userVerif.UserId,userVerif.VerificationCode)
+
+		helper.SendMail(userVerif.Email, subject, message)
+	}
+	
+	fmt.Println("TESSSSSS")
 }

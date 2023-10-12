@@ -5,16 +5,14 @@ import (
 )
 
 type Consumer interface {
-	ConsumeQueuedMessage()
+	ConsumeQueuedMessage(queueName string)
 }
-type emailNotification struct {
+type registerNotification struct {
 	channel *amqp.Channel
-	queue amqp.Queue
 }
 
-func NewConsumer(c *amqp.Channel, q amqp.Queue) Consumer{
-	return &emailNotification{
+func NewRegisterNotification(c *amqp.Channel) Consumer{
+	return &registerNotification{
 		channel: c,
-		queue: q,
 	}
 }

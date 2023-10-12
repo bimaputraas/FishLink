@@ -49,7 +49,7 @@ func NewEchoInstance() *echo.Echo{
 	if err != nil {
 		log.Fatalf("Failed to connect to gRPC server: %v", err)
 	}
-	defer grpcConn.Close()
+	// defer grpcConn.Close()
 
 	// init gRPC client
 	grpcClient := pb.NewProductServiceClient(grpcConn)
@@ -73,8 +73,8 @@ func NewEchoInstance() *echo.Echo{
 		user.GET("/order",orderController.GetOrders)
 	}
 
-	// product route
-	product := e.Group("/product", authMiddleware.AuthAdmin)
+	// product route - admin
+	product := e.Group("/product")
 	{
 		product.POST("", productController.CreateProduct)
 		product.PUT("/:id", productController.UpdateProduct)

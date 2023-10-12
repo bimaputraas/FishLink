@@ -13,6 +13,7 @@ func NewUserRepository(db *gorm.DB) UserRepository{
 	return &userRepository{gormDb: db}
 }
 
+// order
 type orderRepository struct{
 	gormDb *gorm.DB
 }

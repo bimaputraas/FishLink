@@ -4,6 +4,7 @@ import (
 	"final_project-ftgo-h8/config"
 	"final_project-ftgo-h8/email_notification-service/consumer"
 	"final_project-ftgo-h8/helper"
+	"log"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -16,11 +17,16 @@ func main(){
 	channel := config.NewChannel()
 	
 	// init queue
-	queue := config.AddQueue(channel,"fishlink-email_notification")
+	registerQueue := config.AddQueue(channel,"fishlink-email_notification")
 	
 	// init consumer
-	consumer := consumer.NewConsumer(channel,queue)
+	registerQonsumer := consumer.NewRegisterNotification(channel)
 	
-	// start app
-	consumer.ConsumeQueuedMessage()
+	// start register consume
+	go registerQonsumer.ConsumeQueuedMessage(registerQueue.Name)
+	
+	// continue
+	var forever chan struct{}
+	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
+	<-forever
 }
