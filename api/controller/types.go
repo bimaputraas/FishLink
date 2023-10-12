@@ -9,6 +9,7 @@ type UserController interface {
 	TopUp(ctx echo.Context) error
 	GetInfo(ctx echo.Context) error
 }
+
 type ProductController interface {
 	CreateProduct(echo.Context) error
 	GetAllProducts(echo.Context) error
