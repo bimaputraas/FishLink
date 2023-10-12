@@ -21,5 +21,5 @@ type UserEmailVerification struct {
 }
 
 type TopUpReqBody struct {
-	Amount	float64 `json:"amount"`
+	Amount	int64 `json:"amount"`
 }

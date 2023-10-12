@@ -24,7 +24,7 @@ func (r *orderRepository) InsertOrderAndDetail(reqBody dto.ReqBodyNewOrder, user
 	}
 	
 	// init total price
-	totalPrice := product.Price * float64(reqBody.Quantity)
+	totalPrice := product.Price * int64(reqBody.Quantity)
 
 	// init and start gorm transaction
 	tx := r.gormDb.Begin()

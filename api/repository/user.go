@@ -96,7 +96,7 @@ func (r *userRepository) FindUserById(userId uint) (model.User,error){
 	return user,nil
 }
 
-func (r *userRepository) UpdateAmount(user model.User, amount float64) (model.User, error) {
+func (r *userRepository) UpdateAmount(user model.User, amount int64) (model.User, error) {
 	user.Amount += amount
 
 	result := r.gormDb.Save(&user)

@@ -11,6 +11,11 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/snap"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (c *userController) Register(ctx echo.Context) error{
@@ -145,26 +150,102 @@ func (c *userController) GetInfo(ctx echo.Context) error{
 	return dto.WriteResponseWithDetail(ctx, 200, "user account information", user)
 }
 
-func (c *userController) TopUp(ctx echo.Context) error{
-	userId := ctx.Get("user").(model.User).Id
+func (c *userController) TopUp(ctx echo.Context) error {
+    userId := ctx.Get("user").(model.User).Id
 
-	var reqBody dto.TopUpReqBody
-	err := ctx.Bind(&reqBody); if err != nil {
-		return dto.WriteResponseWithDetail(ctx,400,"invalid request body",err.Error())
-	}
+    var reqBody dto.TopUpReqBody
+    err := ctx.Bind(&reqBody)
+    if err != nil {
+        return dto.WriteResponseWithDetail(ctx, 400, "invalid request body", err.Error())
+    }
 
-	if reqBody.Amount < 1 {
-		return dto.WriteResponse(ctx,400,"invalid amount")
-	}
+    if reqBody.Amount < 1 {
+        return dto.WriteResponse(ctx, 400, "invalid amount")
+    }
 
-	user, err := c.repository.FindUserById(userId)
-	if err != nil {
-		return dto.WriteResponse(ctx,400,"user not found")
-	}
+    user, err := c.repository.FindUserById(userId)
+    if err != nil {
+        return dto.WriteResponse(ctx, 400, "user not found")
+    }
 
-	if _, err := c.repository.UpdateAmount(user, reqBody.Amount); err != nil {
-		return dto.WriteResponse(ctx,400,"failed to top-up")
-	}
+    // Obtain the Snap token and redirect URL using the provided amount
+    snapToken, redirectURL, err := GetSnapTokenAndRedirectURL(reqBody.Amount)
+    if err != nil {
+        return dto.WriteResponse(ctx, 400, "failed to create Snap transaction")
+    }
 
-	return dto.WriteResponse(ctx, 200, "top-up successfull")
+	// Save the top-up record to MongoDB
+    err = SaveToMongoDB(userId, reqBody.Amount, snapToken, redirectURL)
+    if err != nil {
+        return dto.WriteResponse(ctx, 400, "failed to save data to MongoDB")
+    }
+
+    if _, err := c.repository.UpdateAmount(user, reqBody.Amount); err != nil {
+        return dto.WriteResponse(ctx, 400, "failed to top-up")
+    }
+
+    response := map[string]interface{}{
+        "snapToken":   snapToken,
+        "redirectURL": redirectURL,
+        "message":     "top-up successful",
+    }
+    return ctx.JSON(200, response)
+}
+
+func GetSnapTokenAndRedirectURL(amount int64) (string, string, error) {
+    // Initialize a Snap client
+    snapClient := snap.Client{}
+    snapClient.New("SB-Mid-server-AKGOfC3ib5bSAq230AZ5gsjQ", midtrans.Sandbox)
+
+    // Create a Snap request with the provided amount
+    req := &snap.Request{
+        TransactionDetails: midtrans.TransactionDetails{
+            GrossAmt: amount,
+        },
+        CreditCard: &snap.CreditCardDetails{
+            Secure: true,
+        },
+    }
+
+    // Request to create a Snap transaction
+    snapResp, err := snapClient.CreateTransaction(req)
+
+    if err != nil {
+        return "", "", err
+    }
+
+    // Extract the Snap token and redirect URL from the Snap response
+    snapToken := snapResp.Token
+    redirectURL := snapResp.RedirectURL
+
+    return snapToken, redirectURL, nil
+}
+
+func SaveToMongoDB(userId uint, amount int64, snapToken, redirectURL string) error {
+    // Connect to MongoDB
+    clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+    client, err := mongo.Connect(context.TODO(), clientOptions)
+    if err != nil {
+        return err
+    }
+    defer client.Disconnect(context.TODO())
+
+    // Access the MongoDB collection
+    collection := client.Database("fishlink").Collection("topup")
+
+    // Create a document to insert
+    data := bson.M{
+        "userId":      userId,
+        "amount":      amount,
+        "snapToken":   snapToken,
+        "redirectURL": redirectURL,
+    }
+
+    // Insert the document into the collection
+    _, err = collection.InsertOne(context.TODO(), data)
+    if err != nil {
+        return err
+    }
+
+    return nil
 }

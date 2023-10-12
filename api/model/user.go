@@ -10,7 +10,7 @@ type User struct {
 	Address      string	`json:"address"`
 	Phone        string	`json:"phone"`
 	Status		 string `json:"status"`
-	Amount		 float64 `json:"amount"`
+	Amount		 int64 `json:"amount"`
 	Role 		 string `json:"role"`
 	RegisteredAt time.Time	`json:"registered_at"`
 }
