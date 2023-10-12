@@ -8,7 +8,6 @@ import (
 	"final_project-ftgo-h8/product-service/server"
 	"log"
 	"net"
-	"os"
 
 	"google.golang.org/grpc"
 )
@@ -18,7 +17,7 @@ func main() {
     helper.LoadEnv()
 
 	// init db connection
-    db := config.NewGorm(os.Getenv("DSNGORM"))
+    db := config.NewGorm()
 
     // Create a new gRPC server
     grpcServer := grpc.NewServer()

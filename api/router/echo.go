@@ -9,7 +9,6 @@ import (
 	"final_project-ftgo-h8/pb"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
@@ -23,8 +22,7 @@ func NewEchoInstance() *echo.Echo{
 	})
 
 	// init db
-	dsn := os.Getenv("DSNGORM")
-	gormDb := config.NewGorm(dsn)
+	gormDb := config.NewGorm()
 
 	// init repository
 	userRepository := repository.NewUserRepository(gormDb)
@@ -46,19 +44,6 @@ func NewEchoInstance() *echo.Echo{
 	// init authentication middleware
 	authMiddleware := middleware.NewAuthenticationMiddleware(userRepository)
 
-	// user gateaway (before login)
-	e.POST("/register", userController.Register)
-	e.POST("/login", userController.Login)
-	e.GET("user-verification-register/:id/:code", userController.RegisterVerification)
-	// user route (after login)
-	user := e.Group("/user",authMiddleware.Authentication)
-	{
-		user.GET("/info", userController.GetInfo)
-		user.PUT("/top-up", userController.TopUp)
-		user.POST("/order",orderController.NewOrder)
-		user.GET("/order",orderController.GetOrders)
-	}
-
 	// init gRPC connection
 	grpcConn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
@@ -72,12 +57,26 @@ func NewEchoInstance() *echo.Echo{
 	// init ProductController with the gRPC client
 	productController := controller.NewProductController(grpcClient)
 
+	// user gateaway (before login)
+	e.POST("/register", userController.Register)
+	e.POST("/login", userController.Login)
+	e.GET("user-verification-register/:id/:code", userController.RegisterVerification)
+	e.GET("/product/:id", productController.GetProduct)
+	e.GET("/product", productController.GetAllProducts)
+
+	// user route (after login)
+	user := e.Group("/user", authMiddleware.Authentication)
+	{
+		user.GET("/info", userController.GetInfo)
+		user.PUT("/top-up", userController.TopUp)
+		user.POST("/order",orderController.NewOrder)
+		user.GET("/order",orderController.GetOrders)
+	}
+
 	// product route
-	product := e.Group("/product")
+	product := e.Group("/product", authMiddleware.AuthAdmin)
 	{
 		product.POST("", productController.CreateProduct)
-		product.GET("/:id", productController.GetProduct)
-		product.GET("", productController.GetAllProducts)
 		product.PUT("/:id", productController.UpdateProduct)
 		product.DELETE("/:id", productController.DeleteProduct)
 	}
