@@ -8,7 +8,7 @@ import (
 )
 func NewChannel() *amqp.Channel{
 	rabbitmqHost := os.Getenv("RABBITMQ_HOST")
-	conn, err := amqp.Dial("amqp://guest:guest@"+rabbitmqHost+"/")
+	conn, err := amqp.Dial("amqp://guest:guest@"+rabbitmqHost+":5672/")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
