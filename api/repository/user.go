@@ -15,7 +15,6 @@ func (r *userRepository) InsertUser(reqBody dto.ReqBodyRegister) (model.User,err
 		Address: reqBody.Address,
 		Phone: reqBody.Phone,
 		Status: "Pending Verification",
-		Amount: reqBody.Amount,
 		Role: reqBody.Role,
 		RegisteredAt: time.Now(),
 	}
@@ -97,3 +96,13 @@ func (r *userRepository) FindUserById(userId uint) (model.User,error){
 	return user,nil
 }
 
+func (r *userRepository) UpdateAmount(user model.User, amount float64) (model.User, error) {
+	user.Amount += amount
+
+	result := r.gormDb.Save(&user)
+	if result.Error != nil {
+		return model.User{}, result.Error
+	}
+
+	return user, nil
+}

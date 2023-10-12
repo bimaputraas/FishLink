@@ -12,6 +12,7 @@ type UserRepository interface {
 	InsertUserVerification(userId uint, code string) error
 	UpdateUserStatusByIdAndCode(userId uint, code string) (model.User, error)
 	FindUserById(userId uint) (model.User,error)
+	UpdateAmount(user model.User,amount float64) (model.User, error)
 }
 
 type OrderRepository interface{

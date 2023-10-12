@@ -146,7 +146,25 @@ func (c *userController) GetInfo(ctx echo.Context) error{
 }
 
 func (c *userController) TopUp(ctx echo.Context) error{
-	// user := ctx.Get("user").(model.User)
+	userId := ctx.Get("user").(model.User).Id
 
-	return dto.WriteResponse(ctx, 200, "top up success")
+	var reqBody dto.TopUpReqBody
+	err := ctx.Bind(&reqBody); if err != nil {
+		return dto.WriteResponseWithDetail(ctx,400,"invalid request body",err.Error())
+	}
+
+	if reqBody.Amount < 1 {
+		return dto.WriteResponse(ctx,400,"invalid amount")
+	}
+
+	user, err := c.repository.FindUserById(userId)
+	if err != nil {
+		return dto.WriteResponse(ctx,400,"user not found")
+	}
+
+	if _, err := c.repository.UpdateAmount(user, reqBody.Amount); err != nil {
+		return dto.WriteResponse(ctx,400,"failed to top-up")
+	}
+
+	return dto.WriteResponse(ctx, 200, "top-up successfull")
 }

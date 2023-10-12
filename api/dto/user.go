@@ -6,7 +6,6 @@ type ReqBodyRegister struct {
 	Password string  `json:"password"`
 	Address  string  `json:"address"`
 	Phone    string  `json:"phone"`
-	Amount   float64 `json:"amount"`
 	Role     string  `json:"role"`
 }
 
@@ -19,4 +18,8 @@ type UserEmailVerification struct {
 	Email            string `json:"email"`
 	UserId           uint   `json:"user_id"`
 	VerificationCode string `json:"verification_code"`
+}
+
+type TopUpReqBody struct {
+	Amount	float64 `json:"amount"`
 }
