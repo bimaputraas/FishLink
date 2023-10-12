@@ -38,3 +38,39 @@ func (a *authenticationMiddleware) Authentication(next echo.HandlerFunc) echo.Ha
 		return next(c)
 	}
 }
+
+func (a *authenticationMiddleware) AuthAdmin(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// init token from request header
+		tokenString := c.Request().Header.Get("Authorization")
+		if tokenString == "" {
+			return dto.WriteResponse(c, 401, "No token")
+		}
+
+		// init claim
+		secretsign := []byte(os.Getenv("SECRETSIGN"))
+		claims, err := helper.ParseJWT(tokenString, secretsign)
+		if err != nil {
+			return dto.WriteResponseWithDetail(c, 401, "unauthorized user", err.Error())
+		}
+
+		// type assertion
+		userId := claims["user_id"].(float64)
+
+		// init user from db
+		user, err := a.repository.FindUserById(uint(userId))
+		if err != nil {
+			return dto.WriteResponseWithDetail(c, 401, "undefined user", err.Error())
+		}
+
+		// Check user role is "admin"
+		if user.Role != "Admin" {
+			return dto.WriteResponse(c, 403, "forbidden. user is not an admin.")
+		}
+
+		// set user to context
+		c.Set("user", user)
+
+		return next(c)
+	}
+}

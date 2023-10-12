@@ -8,6 +8,7 @@ import (
 
 type AuthenticationMiddleware interface {
 	Authentication(next echo.HandlerFunc) echo.HandlerFunc
+	AuthAdmin(next echo.HandlerFunc) echo.HandlerFunc
 }
 
 type authenticationMiddleware struct {
