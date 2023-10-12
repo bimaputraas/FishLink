@@ -4,10 +4,12 @@ services:
     build: notification-service
     environment:
       AUTHMAILPASSWORD: tpgijjwafrbnvmwl
-      RABBITMQ_HOST: rabbitmq:5673
+      RABBITMQ_HOST: rabbitmq
     depends_on:
       - rabbitmq
-  product-service:
+      - main-api
+    restart: always
+  product-services:
     build: product-service
     environment:
       DATABASE_HOST: containers-us-west-198.railway.app
@@ -15,6 +17,11 @@ services:
       DATABASE_USER: postgres
       DATABASE_PASS: SHd6S6PqrLIJzNi1YhOA
       DATABASE_NAME: railway
+    ports:
+      - '50053:50053'
+    expose:
+      - '50053'
+    restart: always
   main-api:
     build: api
     environment:
@@ -24,10 +31,18 @@ services:
       DATABASE_PASS: SHd6S6PqrLIJzNi1YhOA
       DATABASE_NAME: railway
       RABBITMQ_HOST: rabbitmq
+      JWTSECRET: ansdansdoashdasuiodhaisudhasiudhasiudahsdiuh
+      HOST_PRODUCT_SERVER: product-services
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
     depends_on:
       - rabbitmq
+    restart: always
   rabbitmq:
     image: rabbitmq:3.12-management
     ports:
       - 5672:5672
       - 15672:15672
+    restart: always
