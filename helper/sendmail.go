@@ -2,6 +2,7 @@ package helper
 
 import (
 	"fmt"
+	"log"
 	"net/smtp"
 	"os"
 	"strings"
@@ -31,6 +32,7 @@ func SendMail(mail, subject, message string) error {
 	if err != nil {
 		return err
 	}
+	log.Printf("success send mail to %s", mail)
 
 	return nil
 }

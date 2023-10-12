@@ -26,7 +26,9 @@ func (c *userController) Register(ctx echo.Context) error{
 	// validate and set role
 	switch reqBody.Role{
 	case "Admin":
+		reqBody.Role = "Admin"
 	case "User":
+		reqBody.Role = "User"
 	case "admin":
 		reqBody.Role = "Admin"
 	case "user":
@@ -36,7 +38,6 @@ func (c *userController) Register(ctx echo.Context) error{
 	default:
 		return dto.WriteResponse(ctx,400,"invalid role")
 	}
-
 
 	// hash
 	hash,err := helper.HashPassword(reqBody.Password)
