@@ -1,16 +1,16 @@
 version: '3.9'
 services:
-  notification-service:
-    build: notification-service
-    environment:
-      AUTHMAILPASSWORD: tpgijjwafrbnvmwl
-      RABBITMQ_HOST: rabbitmq
-    depends_on:
-      - rabbitmq
-      - main-api
-    restart: always
+  # notification-service:
+  #   build: notification-service
+  #   environment:
+  #     AUTHMAILPASSWORD: tpgijjwafrbnvmwl
+  #     RABBITMQ_HOST: rabbitmq
+  #   depends_on:
+  #     - rabbitmq
+  #     - main-api
+  #   restart: always
   product-services:
-    build: product-service
+    image: gcr.io/copper-diorama-388207/fl-product-service:v1
     environment:
       DATABASE_HOST: containers-us-west-198.railway.app
       DATABASE_PORT: '5646'
@@ -18,9 +18,9 @@ services:
       DATABASE_PASS: SHd6S6PqrLIJzNi1YhOA
       DATABASE_NAME: railway
     ports:
-      - '50053:50053'
+      - '50051:50051'
     expose:
-      - '50053'
+      - '50051'
     restart: always
   main-api:
     build: api
@@ -30,8 +30,9 @@ services:
       DATABASE_USER: postgres
       DATABASE_PASS: SHd6S6PqrLIJzNi1YhOA
       DATABASE_NAME: railway
-      RABBITMQ_HOST: rabbitmq
+      DBURL_POSTGRES: 'postgresql://postgres:SHd6S6PqrLIJzNi1YhOA@containers-us-west-198.railway.app:5646/railway'
       JWTSECRET: ansdansdoashdasuiodhaisudhasiudhasiudahsdiuh
+      RABBITMQ_HOST: rabbitmq
       HOST_PRODUCT_SERVER: product-services
     ports:
       - '8080:8080'

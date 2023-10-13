@@ -38,5 +38,4 @@ func (c *registerNotification) ConsumeQueuedMessage(queueName string){
 		helper.SendMail(userVerif.Email, subject, message)
 	}
 	
-	fmt.Println("TESSSSSS")
 }

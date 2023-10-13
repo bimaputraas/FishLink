@@ -93,5 +93,5 @@ func (c *productController) DeleteProduct(ctx echo.Context) error {
 		return dto.ErrorResponse(ctx, err)
 	}
 
-	return ctx.NoContent(204)
+	return dto.WriteResponse(ctx,200,"delete success")
 }
