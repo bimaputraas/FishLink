@@ -1,14 +1,14 @@
 version: '3.9'
 services:
-  # notification-service:
-  #   build: notification-service
-  #   environment:
-  #     AUTHMAILPASSWORD: tpgijjwafrbnvmwl
-  #     RABBITMQ_HOST: rabbitmq
-  #   depends_on:
-  #     - rabbitmq
-  #     - main-api
-  #   restart: always
+  notification-service:
+    image: gcr.io/copper-diorama-388207/fl-notification-service:v1
+    environment:
+      AUTHMAILPASSWORD: tpgijjwafrbnvmwl
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - rabbitmq
+      - main-api
+    restart: always
   product-services:
     image: gcr.io/copper-diorama-388207/fl-product-service:v1
     environment:
@@ -23,7 +23,7 @@ services:
       - '50051'
     restart: always
   main-api:
-    build: api
+    image: gcr.io/copper-diorama-388207/fl-mainapi:v2
     environment:
       DATABASE_HOST: containers-us-west-198.railway.app
       DATABASE_PORT: '5646'
@@ -40,6 +40,7 @@ services:
       - '8080'
     depends_on:
       - rabbitmq
+      - product-services
     restart: always
   rabbitmq:
     image: rabbitmq:3.12-management

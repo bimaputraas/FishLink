@@ -26,7 +26,11 @@ func (c *userController) Register(ctx echo.Context) error{
 		return dto.WriteResponseWithDetail(ctx,400,"failed to bind",err.Error())
 	}
 	
-	// validate 
+	// validate
+	err = helper.ValidateStruct(reqBody)
+	if err != nil {
+		return dto.WriteResponseWithDetail(ctx,400,"invalid input",err.Error())
+	}
 
 	// validate and set role
 	switch reqBody.Role{
@@ -111,6 +115,12 @@ func (c *userController) Login(ctx echo.Context) error{
 	err := ctx.Bind(&reqBody)
 	if err != nil {
 		return dto.WriteResponseWithDetail(ctx,400,"failed to bind",err.Error())
+	}
+
+	// validate
+	err = helper.ValidateStruct(reqBody)
+	if err != nil {
+		return dto.WriteResponseWithDetail(ctx,400,"invalid input",err.Error())
 	}
 
 	// find by email
