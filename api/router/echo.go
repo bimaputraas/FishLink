@@ -1,14 +1,15 @@
 package router
 
 import (
-	"final_project-ftgo-h8/api/controller"
-	"final_project-ftgo-h8/api/middleware"
-	"final_project-ftgo-h8/api/publisher"
-	"final_project-ftgo-h8/api/repository"
-	"final_project-ftgo-h8/config"
-	"final_project-ftgo-h8/pb"
+	"fishlink-mainapi/config"
+	"fishlink-mainapi/controller"
+	"fishlink-mainapi/middleware"
+	"fishlink-mainapi/pb"
+	"fishlink-mainapi/publisher"
+	"fishlink-mainapi/repository"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
@@ -45,11 +46,11 @@ func NewEchoInstance() *echo.Echo{
 	authMiddleware := middleware.NewAuthenticationMiddleware(userRepository)
 
 	// init gRPC connection
-	grpcConn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	host := os.Getenv("HOST_PRODUCT_SERVER")
+	grpcConn, err := grpc.Dial(host+":50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Failed to connect to gRPC server: %v", err)
 	}
-	// defer grpcConn.Close()
 
 	// init gRPC client
 	grpcClient := pb.NewProductServiceClient(grpcConn)

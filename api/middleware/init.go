@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"final_project-ftgo-h8/api/repository"
+	"fishlink-mainapi/repository"
 
 	"github.com/labstack/echo/v4"
 )

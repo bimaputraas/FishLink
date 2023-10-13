@@ -1,15 +1,15 @@
 package server
 
 import (
-    "context"
-    "strconv"
+	"context"
+	"strconv"
 
-    pb "final_project-ftgo-h8/pb"
-    "final_project-ftgo-h8/product-service/model"
+	"fishlink-product-service/model"
+	pb "fishlink-product-service/pb"
 
-    "google.golang.org/grpc/codes"
-    "google.golang.org/grpc/status"
-    "gorm.io/gorm"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"gorm.io/gorm"
 )
 
 func (s *ProductServer) ValidateProduct(product *pb.Product) error {

@@ -2,8 +2,8 @@ package repository
 
 import (
 	"errors"
-	"final_project-ftgo-h8/api/dto"
-	"final_project-ftgo-h8/api/model"
+	"fishlink-mainapi/dto"
+	"fishlink-mainapi/model"
 	"time"
 )
 

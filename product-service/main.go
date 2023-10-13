@@ -1,21 +1,19 @@
 package main
 
 import (
-	"final_project-ftgo-h8/config"
-	"final_project-ftgo-h8/helper"
-	"final_project-ftgo-h8/pb"
-	"final_project-ftgo-h8/product-service/repository"
-	"final_project-ftgo-h8/product-service/server"
+	"fishlink-product-service/config"
+	"fishlink-product-service/pb"
+	"fishlink-product-service/repository"
+	"fishlink-product-service/server"
 	"log"
 	"net"
+
+	_ "github.com/joho/godotenv/autoload"
 
 	"google.golang.org/grpc"
 )
 
 func main() {
-    // load env
-    helper.LoadEnv()
-
 	// init db connection
     db := config.NewGorm()
 
@@ -32,7 +30,7 @@ func main() {
     pb.RegisterProductServiceServer(grpcServer, productServer)
 
     // Listen on a port
-    lis, err := net.Listen("tcp", ":50051")
+    lis, err := net.Listen("tcp",":50051")
     if err != nil {
         log.Fatalf("Failed to listen: %v", err)
     }

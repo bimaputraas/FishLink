@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"final_project-ftgo-h8/product-service/model"
+	"fishlink-product-service/model"
 
 	"gorm.io/gorm"
 )
