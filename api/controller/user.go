@@ -159,8 +159,8 @@ func (c *userController) TopUp(ctx echo.Context) error {
         return dto.WriteResponseWithDetail(ctx, 400, "invalid request body", err.Error())
     }
 
-    if reqBody.Amount < 1 {
-        return dto.WriteResponse(ctx, 400, "invalid amount")
+    if reqBody.Amount < 20000 {
+        return dto.WriteResponse(ctx, 400, "failed, minimum top up 20000")
     }
 
     user, err := c.repository.FindUserById(userId)
@@ -198,9 +198,11 @@ func GetSnapTokenAndRedirectURL(amount int64) (string, string, error) {
     snapClient.New("SB-Mid-server-AKGOfC3ib5bSAq230AZ5gsjQ", midtrans.Sandbox)
 
     // Create a Snap request with the provided amount
+	orderIdStr := helper.GenerateRandomString(20)
     req := &snap.Request{
         TransactionDetails: midtrans.TransactionDetails{
             GrossAmt: amount,
+			OrderID: orderIdStr,
         },
         CreditCard: &snap.CreditCardDetails{
             Secure: true,
@@ -223,7 +225,8 @@ func GetSnapTokenAndRedirectURL(amount int64) (string, string, error) {
 
 func SaveToMongoDB(userId uint, amount int64, snapToken, redirectURL string) error {
     // Connect to MongoDB
-    clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	mongoDSN := os.Getenv("DBURL_MONGO")
+    clientOptions := options.Client().ApplyURI(mongoDSN)
     client, err := mongo.Connect(context.TODO(), clientOptions)
     if err != nil {
         return err
