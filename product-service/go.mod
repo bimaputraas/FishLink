@@ -3,7 +3,7 @@ module fishlink-product-service
 go 1.20
 
 require (
-	github.com/rabbitmq/amqp091-go v1.9.0
+	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.12.1
 	google.golang.org/grpc v1.58.2
 	google.golang.org/protobuf v1.31.0
@@ -19,7 +19,6 @@ require (
 	github.com/jackc/pgx/v5 v5.4.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/joho/godotenv v1.5.1
 	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
