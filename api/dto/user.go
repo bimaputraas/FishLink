@@ -1,17 +1,17 @@
 package dto
 
 type ReqBodyRegister struct {
-	Name     string  `json:"name"`
-	Email    string  `json:"email"`
-	Password string  `json:"password"`
-	Address  string  `json:"address"`
-	Phone    string  `json:"phone"`
-	Role     string  `json:"role"`
+	Name     string `json:"name"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+	Address  string `json:"address"`
+	Phone    string `json:"phone"`
+	Role     string `json:"role"`
 }
 
 type ReqBodyLogin struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
 }
 
 type UserEmailVerification struct {
@@ -21,5 +21,5 @@ type UserEmailVerification struct {
 }
 
 type TopUpReqBody struct {
-	Amount	int64 `json:"amount"`
+	Amount int64 `json:"amount"`
 }
