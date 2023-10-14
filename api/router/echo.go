@@ -75,7 +75,7 @@ func NewEchoInstance() *echo.Echo{
 	}
 
 	// product route - admin
-	product := e.Group("/product")
+	product := e.Group("/product",authMiddleware.AuthAdmin)
 	{
 		product.POST("", productController.CreateProduct)
 		product.PUT("/:id", productController.UpdateProduct)

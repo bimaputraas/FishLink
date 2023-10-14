@@ -23,7 +23,7 @@ services:
       - '50051'
     restart: always
   main-api:
-    image: gcr.io/copper-diorama-388207/fl-mainapi:v2
+    image: gcr.io/copper-diorama-388207/fl-mainapi:v3
     environment:
       DATABASE_HOST: containers-us-west-198.railway.app
       DATABASE_PORT: '5646'
