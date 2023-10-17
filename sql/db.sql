@@ -46,7 +46,7 @@ CREATE TABLE order_details (
 
 -- contoh record data
 INSERT INTO products (name, description, price, stock) VALUES
-    ('Ikan Salmon', 'Salmon Norwegia', 750000, 100),
+    ('Ikan Salmon', 'Salmon ', 750000, 100),
     ('Udang Windu', 'Udang windu besar-besaran dari Indonesia', 450000, 150),
     ('Ikan Tuna', 'Tuna sirip kuning yang segar', 850000, 75),
     ('Kerang Segar', 'Kerang segar dari pantai lokal', 120000, 200),

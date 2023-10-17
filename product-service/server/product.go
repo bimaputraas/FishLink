@@ -29,7 +29,7 @@ func (s *ProductServer) CreateProduct(ctx context.Context, req *pb.CreateProduct
     product := &model.Product{
         Name:        newProduct.GetName(),
         Description: newProduct.GetDescription(),
-        Price:       float32(newProduct.GetPrice()),
+        Price:       int64(newProduct.GetPrice()),
         Stock:       int32(newProduct.GetStock()),
     }
 
@@ -41,7 +41,7 @@ func (s *ProductServer) CreateProduct(ctx context.Context, req *pb.CreateProduct
         Id:          strconv.FormatUint(uint64(product.ID), 10),
         Name:        product.Name,
         Description: product.Description,
-        Price:       float32(product.Price),
+        Price:       int64(product.Price),
         Stock:       int32(product.Stock),
     }
 
@@ -60,7 +60,7 @@ func (s *ProductServer) GetAllProduct(ctx context.Context, req *pb.GetAllProduct
             Id:          strconv.FormatUint(uint64(product.ID), 10),
             Name:        product.Name,
             Description: product.Description,
-            Price:       float32(product.Price),
+            Price:       int64(product.Price),
             Stock:       int32(product.Stock),
         })
     }
@@ -92,7 +92,7 @@ func (s *ProductServer) GetProduct(ctx context.Context, req *pb.GetProductReques
         Id:          strconv.FormatUint(uint64(product.ID), 10),
         Name:        product.Name,
         Description: product.Description,
-        Price:       float32(product.Price),
+        Price:       int64(product.Price),
         Stock:       int32(product.Stock),
     }
 
@@ -121,7 +121,7 @@ func (s *ProductServer) UpdateProduct(ctx context.Context, req *pb.UpdateProduct
 
     existingProduct.Name = updatedProduct.GetName()
     existingProduct.Description = updatedProduct.GetDescription()
-    existingProduct.Price = float32(updatedProduct.GetPrice())
+    existingProduct.Price = int64(updatedProduct.GetPrice())
     existingProduct.Stock = int32(updatedProduct.GetStock())
 
     if err := s.repo.UpdateProduct(existingProduct); err != nil {
@@ -132,7 +132,7 @@ func (s *ProductServer) UpdateProduct(ctx context.Context, req *pb.UpdateProduct
         Id:          strconv.FormatUint(uint64(existingProduct.ID), 10),
         Name:        existingProduct.Name,
         Description: existingProduct.Description,
-        Price:       float32(existingProduct.Price),
+        Price:       int64(existingProduct.Price),
         Stock:       int32(existingProduct.Stock),
     }
 
@@ -163,7 +163,7 @@ func (s *ProductServer) DeleteProduct(ctx context.Context, req *pb.DeleteProduct
         Id:          strconv.FormatUint(uint64(existingProduct.ID), 10),
         Name:        existingProduct.Name,
         Description: existingProduct.Description,
-        Price:       float32(existingProduct.Price),
+        Price:       int64(existingProduct.Price),
         Stock:       int32(existingProduct.Stock),
     }
 

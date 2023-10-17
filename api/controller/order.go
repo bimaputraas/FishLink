@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fishlink-mainapi/dto"
+	"fishlink-mainapi/helper"
 	"fishlink-mainapi/model"
 	"time"
 
@@ -20,6 +21,10 @@ func (c *orderController) NewOrder(ctx echo.Context) error{
 	}
 	
 	// validate
+	err = helper.ValidateStruct(reqBody)
+	if err != nil {
+		return dto.WriteResponseWithDetail(ctx,400,"invalid input",err.Error())
+	}
 
 	// validate quantity
 	if reqBody.Quantity < 1 {

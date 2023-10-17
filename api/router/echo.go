@@ -9,6 +9,7 @@ import (
 	"fishlink-mainapi/repository"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
@@ -45,11 +46,11 @@ func NewEchoInstance() *echo.Echo{
 	authMiddleware := middleware.NewAuthenticationMiddleware(userRepository)
 
 	// init gRPC connection
-	grpcConn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	host := os.Getenv("HOST_PRODUCT_SERVER")
+	grpcConn, err := grpc.Dial(host+":50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Failed to connect to gRPC server: %v", err)
 	}
-	// defer grpcConn.Close()
 
 	// init gRPC client
 	grpcClient := pb.NewProductServiceClient(grpcConn)
@@ -74,7 +75,7 @@ func NewEchoInstance() *echo.Echo{
 	}
 
 	// product route - admin
-	product := e.Group("/product")
+	product := e.Group("/product",authMiddleware.AuthAdmin)
 	{
 		product.POST("", productController.CreateProduct)
 		product.PUT("/:id", productController.UpdateProduct)
