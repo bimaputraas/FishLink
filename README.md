@@ -1,5 +1,5 @@
 Web-based microservices REST API, empowering local fishermen to market seafood online.
-Tech stack: Golang, MongoDB, PostgresSQL, JWT, 3rd party API for server-side, RabbitMQ, Cron, Redis, Docker
+Tech stack: Golang, MongoDB, PostgresSQL, JWT, 3rd party API for server-side, RabbitMQ, gRPC
 
 Dev :
 timothypartaliano@gmail.com
